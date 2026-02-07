@@ -10,7 +10,7 @@ const exchangeRateText = document.getElementById('exchange-rate');
 const lastUpdateText = document.getElementById('last-update');
 
 // ===== CONFIGURAÇÃO DA API =====
-const API_KEY = 'ac39692952b6416a54edb26e';
+const API_KEY = 'YOUR_API_KEY';
 const API_URL = `https://v6.exchangerate-api.com/v6/${API_KEY}`;
 
 // ===== OBJETO PARA CACHE DE TAXAS =====
@@ -134,7 +134,7 @@ async function fetchExchangeRates(baseCurrency) {
 
     // Atualiza o cache
     exchangeRates[baseCurrency] = data.conversion_rates;
-    lastFetchTime = new Date();
+    lastFetchTime = new Date(data.time_last_update_unix * 1000);
 
     console.log('✅ Taxas atualizadas com sucesso!');
 
