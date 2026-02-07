@@ -10,12 +10,13 @@ const exchangeRateText = document.getElementById('exchange-rate');
 const lastUpdateText = document.getElementById('last-update');
 
 // ===== CONFIGURAÇÃO DA API =====
-const API_KEY = 'YOUR_API_KEY';
-const API_URL = 'https://v6.exchangerate-api.com/v6';
+const API_KEY = 'ac39692952b6416a54edb26e';
+const API_URL = `https://v6.exchangerate-api.com/v6/${API_KEY}`;
 
 // ===== OBJETO PARA CACHE DE TAXAS =====
 let exchangeRates = {};
 let lastFetchTime = null;
+const CACHE_DURATION = 10 * 60 * 1000; // 1 hora em microssegundos
 
 // ===== FUNÇÕES AUXILIARES =====
 
@@ -57,8 +58,7 @@ function showError(message) {
   resultDiv.classList.remove('hidden');
   convertedAmount.textContent = 'Erro';
   exchangeRateText.textContent = message;
-  lastUpdateText;
-  textContent = '';
+  lastUpdateText.textContent = '';
   resultDiv.style.borderColor = '#ef4444';
 }
 
@@ -81,6 +81,23 @@ function showResult(result, rate) {
   resultDiv.classList.remove('hidden');
 }
 
+/**
+ * Verifica se o cache ainda é válido
+ * @params {string} baseCurrency - Moeda base
+ * @returns {boolean} - True se cache válido
+ */
+function isCacheValid(baseCurrency) {
+  if (!exchangeRates[baseCurrency] || !lastFetchTime) {
+    return false;
+  }
+
+  const now = new Date().getTime();
+  const last = lastFetchTime.getTime();
+  const timeDiff = now - last;
+
+  return timeDiff < CACHE_DURATION;
+}
+
 // ===== FUNÇÃO PRINCIPAL DE CONVERSÃO =====
 
 /**
@@ -89,51 +106,45 @@ function showResult(result, rate) {
  * @returns {Promise<Object>} - Objeto com taxas de câmbio
  */
 async function fetchExchangeRates(baseCurrency) {
-  try {
-    const mockRates = {
-      USD: {
-        USD: 1,
-        EUR: 0.92,
-        BRL: 5.24,
-        GBP: 0.79,
-        JPY: 149.5,
-      },
-      EUR: {
-        USD: 1.09,
-        EUR: 1,
-        BRL: 5.7,
-        GBP: 0.86,
-        JPY: 162.5,
-      },
-      BRL: {
-        USD: 0.19,
-        EUR: 0.18,
-        BRL: 1,
-        GBP: 0.15,
-        JPY: 28.5,
-      },
-      GBP: {
-        USD: 1.27,
-        EUR: 1.16,
-        BRL: 6.64,
-        GBP: 1,
-        JPY: 189.2,
-      },
-      JPY: {
-        USD: 0.0067,
-        EUR: 0.0062,
-        BRL: 0.035,
-        GBP: 0.0053,
-        JPY: 1,
-      },
+  // Verifica cache primeiro
+  if (isCacheValid(baseCurrency)) {
+    console.log('📦 Usando taxas do cache');
+
+    return {
+      rates: exchangeRates[baseCurrency],
+      timestamp: lastFetchTime,
     };
+  }
 
-    // Simula delay da API (300ms)
-    await new Promise(resolve => setTimeout(resolve, 300));
+  console.log('🌐 Buscando taxas da API...');
 
-    return mockRates[baseCurrency];
+  try {
+    const response = await fetch(`${API_URL}/latest/${baseCurrency}`);
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+
+    // Verifica se a API retornou sucesso
+    if (data.result !== 'success') {
+      throw new Error(data['error-type'] || 'Erro desconhecido na API');
+    }
+
+    // Atualiza o cache
+    exchangeRates[baseCurrency] = data.conversion_rates;
+    lastFetchTime = new Date();
+
+    console.log('✅ Taxas atualizadas com sucesso!');
+
+    return {
+      rates: data.conversion_rates,
+      timestamp: lastFetchTime,
+    };
   } catch (error) {
-    throw new Error('Erro ao buscar taxas de câmbio');
+    console.error('❌ Erro ao buscar taxas:', error);
+    throw error;
   }
 }
 
@@ -154,34 +165,45 @@ async function convertCurrency() {
 
   // Mesma moeda
   if (fromCode == toCode) {
-    showResult(amount, 1);
+    showResult(amount, 1, new Date());
     return;
   }
 
   // Mostra loading no botão
-  convertButton.textContent = 'Convertendo...';
+  const originalText = convertButton.textContent;
+  convertButton.innerHTML = '<span>Convertendo...</span>';
   convertButton.disabled = true;
 
   try {
     // Busca taxas de câmbio
-    const rates = await fetchExchangeRates(fromCode);
+    const { rates, timestamp } = await fetchExchangeRates(fromCode);
+
+    // Verifica se a moeda destino existe
+    if (!rates[toCode]) {
+      throw new Error(`Moeda ${toCode} não encontrada`);
+    }
 
     // Calcula conversão
     const rate = rates[toCode];
     const result = amount * rate;
 
     // Exibe resultado
-    showResult(result, rate);
-
-    // Salva no cache
-    exchangeRates = rates;
-    lastFetchTime = new Date();
+    showResult(result, rate, timestamp);
   } catch (error) {
-    showError('Erro ao converter. Tente novamente.');
-    console.error('Erro:', error);
+    let errorMessage = 'Erro ao converter. Tente novamente.';
+
+    // Mensagem de erro específica
+    if (error.message.includes('API key')) {
+      errorMessage = 'Erro: Chave da API inválida';
+    } else if (error.message.includes('network') || error.message.includes('fetch')) {
+      errorMessage = 'Erro de conexão. Verifique sua internet.';
+    }
+
+    showError(errorMessage);
+    console.error('Erro detalhado:', error);
   } finally {
     // Restaura botão
-    convertButton.textContent = 'Converter';
+    convertButton.textContent = originalText;
     convertButton.disabled = false;
   }
 }
@@ -232,4 +254,5 @@ toCurrency.addEventListener('change', () => {
 
 // ===== INICIALIZAÇÃO =====
 console.log('✅ Conversor de moedas carregado!');
-console.log('📊 Versão: 1.0.0 (Mock API)');
+console.log('📊 Versão: 1.0.0 (API Real)');
+console.log('🔑 API Key configurada:', API_KEY !== 'YOUR_API_KEY' ? '✓' : '✗ Configure sua chave!');
