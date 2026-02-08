@@ -1,25 +1,10 @@
 # Conversor de moedas
 
-<div align="center">
-  ![Status](https://img.shields.io/badge/Status-Concluido-success)
-  ![Versao](https://img.shields.io/badge/Versão-1.0.0-blue)
-  ![Licença](https://img.shields.io/badge/Licença-MIT-green)
+![Status](https://img.shields.io/badge/Status-Concluido-success) ![Licença](https://img.shields.io/badge/Licença-MIT-green)
 
 **Conversor de moedas em tempo real com interface moderna e responsiva**
 
 [Demo ao vivo](#) • [Reportar Bug](../../issues) • [Sugerir Feature](../../issues)
-
-</div>
-
----
-
-## Preview
-
-![Conversor de Moedas - Desktop](https://via.placeholder.com/800x500/0f172a/10b981?text="Desktop+Preview)
-
-<div align="center">
-  <img src="https://via.placeholder.com/250x500/0f172a/6366f1?text=Mobile+Preview" alt="Mobile Preview" width="250">
-</div>
 
 ---
 
@@ -39,15 +24,12 @@
 
 ## Tecnologias utilizadas
 
-<div align="center">
-| Tecnologia | Descrição |
-|---|---|
-|![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white) | Estrutura semântica |
-|![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white) | Estilização moderna |
-|![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black) | Lógica e interatividade |
-|![API](https://img.shields.io/badge/API-ExchangeRate-00ADD8?style=for-the-badge) | Dados de câmbio |
-
-</div>
+| Tecnologia                                                                                                        | Descrição               |
+| ----------------------------------------------------------------------------------------------------------------- | ----------------------- |
+| ![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)                | Estrutura semântica     |
+| ![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)                   | Estilização moderna     |
+| ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black) | Lógica e interatividade |
+| ![API](https://img.shields.io/badge/API-ExchangeRate-00ADD8?style=for-the-badge)                                  | Dados de câmbio         |
 
 ### Conceitos aplicados
 
@@ -275,9 +257,6 @@ Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para ma
 
 ---
 
-<div align="center">
-  **Se este projeto te ajudou, deixe uma ⭐!**
+**Se este projeto te ajudou, deixe uma ⭐!**
 
 Feito com 🩷 e ☕
-
-</div>
