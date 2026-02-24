@@ -1,1 +1,6 @@
-.env
+# Configurações sensíveis
+js/config.js
+
+# Arquivos do sistema
+.DS_Store
+Thumbs.db

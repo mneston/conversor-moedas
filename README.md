@@ -48,7 +48,7 @@
 
 - Navegador moderno (Chrome, Firefox, Edge, Safari)
 - Conexão com internet
-- Chave de API gratuita da [ExchangeRate-API](https://www.exchangerate-api.com/)
+- Chave de API **gratuita** da [ExchangeRate-API](https://www.exchangerate-api.com/)
 
 ### Instalação
 
@@ -61,11 +61,26 @@ cd conversor-moedas
 
 2. **Configure a API Key**
 
-Abra o arquivo `js/app.js` e substitua `YOUR_API_KEY`:
+```bash
+# Copie o arquivo de exemplo
+cp js/config.example.js js/config.js
+```
+
+Edite `js/config.js` e substitua `'YOUR_API_KEY'` pela sua chave:
 
 ```javascript
-const API_KEY = 'YOUR_API_KEY`;
+const CONFIG = {
+  API_KEY: 'sua-chave-aqui', // <- Cole sua key aqui
+  API_URL: 'https://v6.exchangerate-api.com/v6',
+};
 ```
+
+> 💡 **Como obter sua API Key**
+>
+> 1. Acesse https://www.exchangerate-api.com/
+> 2. Clique em "Get Free Key"
+> 3. Cadastre o seu e-mail
+> 4. Copie a chave e cole no arquivo `config.js`
 
 3. **Abra o projetos**
 

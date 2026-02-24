@@ -10,8 +10,8 @@ const exchangeRateText = document.getElementById('exchange-rate');
 const lastUpdateText = document.getElementById('last-update');
 
 // ===== CONFIGURAÇÃO DA API =====
-const API_KEY = 'YOUR_API_KEY';
-const API_URL = `https://v6.exchangerate-api.com/v6/${API_KEY}`;
+const API_KEY = CONFIG.API_KEY;
+const API_URL = `${CONFIG.API_URL}/${API_KEY}`;
 
 // ===== OBJETO PARA CACHE DE TAXAS =====
 let exchangeRates = {};
