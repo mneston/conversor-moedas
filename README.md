@@ -4,7 +4,7 @@
 
 **Conversor de moedas em tempo real com interface moderna e responsiva**
 
-[Demo ao vivo](#) • [Reportar Bug](../../issues) • [Sugerir Feature](../../issues)
+[Demo ao vivo](https://mneston.github.io/conversor-moedas/) • [Reportar Bug](../../issues) • [Sugerir Feature](../../issues)
 
 ---
 
